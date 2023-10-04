@@ -6,7 +6,8 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>게시글 상세</title>
-		<link rel="stylesheet" href="../resources/css/main.css">
+<!-- 		<link rel="stylesheet" href="../resources/css/main.css"> -->
+		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>		
 	</head>
 	<body>
 		<h1>게시글 상세</h1>
@@ -49,87 +50,207 @@
 				<button type="button" onclick="showBoardList();">목록으로</button>
 				<button type="button" onclick="javascript:history.go(-1);">뒤로가기</button>
 			</div>
+			
+			
 			<!-- 댓글 등록 -->
 			<hr>
-			<form action="/reply/add.kh" method="post">
-				<input type="hidden" name="refBoardNo" value="${board.boardNo }">
-				<table width="500" border="1">
-					<tr>
-						<td>
-							<textarea rows="3" cols="55" name="replyContent"></textarea>
-						</td>
-						<td>
-							<input type="submit" value="완료">
-						</td>
-					</tr>
-				</table>
-			</form>
+			<table align="center" width="500" boarder="1">
+				<tr>
+					<td><textarea rows="3" cols="55" id="rContent"></textarea></td>
+					<td><button id="rSubmit">등록</button></td>
+				</tr>
+			</table>
+<!-- 			<form action="/reply/add.kh" method="post"> -->
+<%-- 				<input type="hidden" name="refBoardNo" value="${board.boardNo }"> --%>
+<!-- 				<table width="500" border="1"> -->
+<!-- 					<tr> -->
+<!-- 						<td> -->
+<!-- 							<textarea rows="3" cols="55" name="replyContent"></textarea> -->
+<!-- 						</td> -->
+<!-- 						<td> -->
+<!-- 							<input type="submit" value="완료"> -->
+<!-- 						</td> -->
+<!-- 					</tr> -->
+<!-- 				</table> -->
+<!-- 			</form> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			<!-- 댓글 목록 -->
-			<table width="550" border="1">
-				<c:forEach var="reply" items="${rList }">
-					<tr>
-						<td>${reply.replyWriter }</td>
-						<td>${reply.replyContent }</td>
-						<td>${reply.rCreateDate }</td>
-						<td>
-							<a href="javascript:void(0);" onclick="showReplyModifyForm(this,'${reply.replyContent}');">수정하기</a>
-							<c:url var="delUrl" value="/reply/delete.kh">
-								<c:param name="replyNo" 	value="${reply.replyNo }"></c:param>
-								<!-- 내것만 지우도록 하기 위해서 추가함 -->
-								<c:param name="replyWriter" value="${reply.replyWriter }"></c:param>
-								<!-- 성공하면 디테일로 가기 위해 필요한 boardNo 셋팅 -->
-								<c:param name="refBoardNo" value="${reply.refBoardNo }"></c:param>
-							</c:url>
-							<a href="javascript:void(0);" onclick="deleteReply('${delUrl }');">삭제하기</a>
-						</td>
-					</tr>
-					<tr id="replyModifyForm" style="display:none;">
+			<table width="550" border="1" id="replyTable">
+			<tbody></tbody>
+<%-- 				<c:forEach var="reply" items="${rList }"> --%>
+<!-- 					<tr> -->
+<%-- 						<td>${reply.replyWriter }</td> --%>
+<%-- 						<td>${reply.replyContent }</td> --%>
+<%-- 						<td>${reply.rCreateDate }</td> --%>
+<!-- 						<td> -->
+<%-- 							<a href="javascript:void(0);" onclick="showReplyModifyForm(this,'${reply.replyContent}');">수정하기</a> --%>
+<%-- 							<c:url var="delUrl" value="/reply/delete.kh"> --%>
+<%-- 								<c:param name="replyNo" 	value="${reply.replyNo }"></c:param> --%>
+<!-- 								내것만 지우도록 하기 위해서 추가함 -->
+<%-- 								<c:param name="replyWriter" value="${reply.replyWriter }"></c:param> --%>
+<!-- 								성공하면 디테일로 가기 위해 필요한 boardNo 셋팅 -->
+<%-- 								<c:param name="refBoardNo" value="${reply.refBoardNo }"></c:param> --%>
+<%-- 							</c:url> --%>
+<%-- 							<a href="javascript:void(0);" onclick="deleteReply('${delUrl }');">삭제하기</a> --%>
+<!-- 						</td> -->
+<!-- 					</tr> -->
+<!-- 					<tr id="replyModifyForm" style="display:none;"> -->
 <!-- 						<form action="/reply/update.kh" method="post"> -->
 <%-- 							<input type="hidden" name="replyNo" value="${reply.replyNo }"> --%>
 <%-- 							<input typeC="hidden" name="refBoardNo" value="${reply.refBoardNo }"> --%>
 <%-- 							<td colspan="3"><input type="text" size="50" name="replyContent" value="${reply.replyContent }"></td> --%>
 <!-- 							<td><input type="submit" value="완료"></td> -->
 <!-- 						</form> -->
-							<td colspan="3"><input id="replyContent" type="text" size="50" name="replyContent" value="${reply.replyContent }"></td>
-							<td><input type="button" onclick="replyModify(this,'${reply.replyNo}','${reply.refBoardNo }');" value="완료"></td>
-					</tr>
-				</c:forEach>
+<%-- 							<td colspan="3"><input id="replyContent" type="text" size="50" name="replyContent" value="${reply.replyContent }"></td> --%>
+<%-- 							<td><input type="button" onclick="replyModify(this,'${reply.replyNo}','${reply.refBoardNo }');" value="완료"></td> --%>
+<!-- 					</tr> -->
+<%-- 				</c:forEach> --%>
 			</table>
+			
+			
 			<script>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			//댓글등록
+			$("#rSubmit").on("click", function() {
+				const rContent = $("#rContent").val();
+				const refBoardNo = ${board.boardNo };
+				$.ajax({
+					url : "/reply/add.kh",
+					data : {replyContent : rContent, refBoardNo : refBoardNo},
+					type : "POST",
+					success : function(result) {
+						if(result == "success") {
+							alert("댓글등록성공");
+							getReplyList();
+						} else {
+							alert("댓글등록실패");
+						}
+					},
+					error : function() {}
+				});
+			});
+			
+			const modifyReply = (replyNo, obj) => {
+				const inputTag = $(obj).parent().prev().children();
+				const replyContent = inputTag.val();
+				$.ajax({
+					url : "/reply/update.kh",
+					data : {replyContent : replyContent, replyNo : replyNo },
+					type : "POST",
+					success : function(data) {
+						if(data == "success") {
+							alert("댓글수정성공")
+							getReplyList();
+						} else {
+							alert("댓글수정실패")
+						}
+					},
+					error : function() {
+						alert("Ajax오류")
+					}
+				});
+			}
+			
+			
+			
+			const removeReply = (replyNo) => {
+				$.ajax({
+					url : "/reply/delete.kh",
+					data : {replyNo : replyNo},
+					type : "POST",
+					success : function(data) {
+						if(data == "success") {
+							alert("댓글삭제성공")
+							getReplyList();
+						} else {
+							alert("댓글삭제실패")
+						}
+					},
+					error : function() {
+						alert("Ajax오류")
+					}
+				});
+
+			}
+			
+			
+			const modifyView = (obj,replyNo, replyContent) => {
+				//alert("t")
+				let tr = $("<tr>");
+				//tr.append("<td><colspan='3'>수정하려고하는내용</td>")
+				tr.append("<td colspan='3'><input type='text' size='50' value='"+replyContent+"'></td>")
+				tr.append("<td><button onclick='modifyReply("+replyNo+", this);'>수정</button></td>");
+				$(obj).parent().parent().after(tr);
+			}
+			
+			
 			
 
 			<!--//댓글 리스트를 불러오는 ajax Function -->
 			const getReplyList = () => {
-				const boardNo = ${board.boardNo };
+				const boardNo = ${board.boardNo};
 				$.ajax({
-					url : "/reply/list/kh",
+					url : "/reply/list.kh",
 					data : {boardNo : boardNo},
 					type : "GET",
-					success :  function(result) {
-						//console.log(result);
+					success : function(data) {
 						const tableBody = $("#replyTable tbody");
 						let tr;
 						let replyWriter;
 						let replyContent;
 						let replyCreateDate;
+						//console.log(data);
+						let btnArea;
+						
 						
 						if(data.length > 0) {
 							for(let i in data) {
 								tr = $("<tr>");
 								replyWriter = $("<td>").text(data[i].replyWriter);
 								replyContent = $("<td>").text(data[i].replyContent);
-								replyCreateData = $("<td>").text(data[i].replyCreateDate);
+								replyCreateData = $("<td width='100'>").text(data[i].rCreateDate);
+								btnArea = $("<td width='150'>")
+												.append("<a href='javascript:void(0)' onclick='modifyView(this,"+data[i].replyNo+",\""+data[i].replyContent+"\");'>수정하기</a>")
+												.append("<a href='javascript:void(0)' onclick='removeReply("+data[i].replyNo+");'>삭제하기</a>");
 								tr.append(replyWriter);
 								tr.append(replyContent);
-								tr.append(rCreateDate);
+								tr.append(replyCreateDate);
+								tr.append(btnArea);
 								tableBody.append(tr);
 							}
 						}
 					},
-					drror : function() {
+					error : function() {
 						alert("Ajax오류")
 					}
-				})
+				});
 			}
 			
 			
@@ -213,9 +334,6 @@
 				function deleteReply(url) {
 					location.href = url;
 				}
-				
-				
-				
 				getReplyList();
 			</script>
 	</body>
